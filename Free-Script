@@ -4,6 +4,8 @@ local Scripts = {
    [7709344486] = "https://raw.githubusercontent.com/ziugpro/Obfuscator/refs/heads/main/SAB_Free.lua",
    --[ Sword a League ]--
    [6761020312] = "https://raw.githubusercontent.com/ziugpro/Obfuscator/refs/heads/main/Sword_Legaue.lua",
+   --[ Steal a Meme ]--
+   [7851663243] = "https://raw.githubusercontent.com/ziugpro/Obfuscator/refs/heads/main/Sam.lua",
 }
 local url = Scripts[game.PlaceId] or Scripts[game.GameId]
 if url then
