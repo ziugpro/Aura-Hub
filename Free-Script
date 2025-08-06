@@ -1,5 +1,5 @@
 local Scripts = {
-   [1234567890] = "link",
+   [7709344486] = "https://raw.githubusercontent.com/ziugpro/Obfuscator/refs/heads/main/SAB_Free.lua",
 }
 local url = Scripts[game.PlaceId] or Scripts[game.GameId]
 if url then
