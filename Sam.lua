@@ -92,46 +92,12 @@ task.spawn(function()
 end)
 local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Tool-Hub-Ui"))()
 
-local UI = SkUI:CreateWindow("Aura - Hub")
+local UI = SkUI:CreateWindow("Aura - Hub - Free")
 local Tab = UI:Create("General")
 local Web = UI:Create("Webhook")
 
 Tab:AddTextLabel("Left", "Main")
-_G.Noclip = false
-_G.NoclipConnection = nil
-local savedValue = LoadSetting("Noclip", false)
-Tab:AddToggle("Left", "Noclip", savedValue, function(v)
-    SaveSetting("Noclip", v)
-    _G.Noclip = v
-    if v then
-        if not _G.NoclipConnection then
-            _G.NoclipConnection = game:GetService("RunService").Stepped:Connect(function()
-                local player = game.Players.LocalPlayer
-                local character = player and player.Character
-                if character then
-                    for _, part in pairs(character:GetChildren()) do
-                        if part:IsA("BasePart") then
-                            part.CanCollide = false
-                        end
-                    end
-                end
-            end)
-        end
-    else
-        if _G.NoclipConnection then
-            _G.NoclipConnection:Disconnect()
-            _G.NoclipConnection = nil
-        end
-        local player = game.Players.LocalPlayer
-        local character = player and player.Character
-        if character then
-            for _, part in pairs(character:GetChildren()) do
-                if part:IsA("BasePart") then
-                    part.CanCollide = true
-                end
-            end
-        end
-    end
+Tab:AddToggle("Left", "Noclip (Premium)", false, function(v)
 end)
 local savedValue = LoadSetting("Infinity Jumb", false)
 Tab:AddToggle("Left", "Infinity Jumb", savedValue, function(v)
@@ -161,70 +127,11 @@ Tab:AddToggle("Left", "Infinity Jumb", savedValue, function(v)
 end)
 Tab:AddToggle("Left", "Inf Money (In Dev)", false, function(v)
 end)
-Tab:AddButton("Left", "Dash Through Wall", function()
-    local Players = game:GetService("Players")
-    local Workspace = game:GetService("Workspace")
-    local RunService = game:GetService("RunService")
-
-    local LocalPlayer = Players.LocalPlayer
-    if not LocalPlayer then
-        return
-    end
-
-    local Character = LocalPlayer.Character
-    if not Character then
-        Character = LocalPlayer.CharacterAdded:Wait()
-    end
-
-    local RootPart = Character:FindFirstChild("HumanoidRootPart")
-    if not RootPart then
-        return
-    end
-
-    local CurrentPosition = RootPart.Position
-    local CurrentCFrame = RootPart.CFrame
-    local FacingDirection = CurrentCFrame.LookVector
-
-    local DashMagnitude = 30
-    local DashOffset = Vector3.new(0, 1.25, 0)
-
-    local DashVector = FacingDirection * DashMagnitude
-    local Destination = CurrentPosition + DashVector + DashOffset
-
-    local BodyPosition = Instance.new("BodyPosition")
-    BodyPosition.MaxForce = Vector3.new(1e9, 1e9, 1e9)
-    BodyPosition.P = 1e5
-    BodyPosition.D = 2000
-    BodyPosition.Position = Destination
-    BodyPosition.Parent = RootPart
-
-    local DashDuration = 0.2
-    local Connection = nil
-    local StartTime = tick()
-
-    Connection = RunService.RenderStepped:Connect(function()
-        if tick() - StartTime >= DashDuration then
-            BodyPosition:Destroy()
-            if Connection then
-                Connection:Disconnect()
-            end
-        end
-    end)
+Tab:AddButton("Left", "Dash Through Wall (Premium)", function()
 end)
 Tab:RealLine("Left")
 Tab:AddTextLabel("Left", "Farming")
-Tab:AddToggle("Left", "Anti-Hitbox", false, function(v)
-    _G.AntiHitbox = v
-
-    local char = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
-
-    for _, part in ipairs(char:GetDescendants()) do
-        if part:IsA("BasePart") and part.Name ~= "HumanoidRootPart" then
-            part.CanCollide = not v
-            part.Massless = v
-            part.Size = v and Vector3.new(0.1, 0.1, 0.1) or Vector3.new(2, 2, 1)
-        end
-    end
+Tab:AddToggle("Left", "Anti-Hitbox (Premium)", false, function(v)
 end)
 Tab:AddSlider("Left", "Aimbot Radius", 50, 500, 150, function(v)
     _G.AimbotRadius = v
@@ -284,52 +191,7 @@ Tab:AddToggle("Left", "Aimbot Circle", false, function(v)
         Circle:Remove()
     end
 end)
-Tab:AddToggle("Left", "Kill Player (Testing)", false, function(v)
-    _G.AutoKill = v
-
-    local Players = game:GetService("Players")
-    local RunService = game:GetService("RunService")
-    local lp = Players.LocalPlayer
-    local char = lp.Character or lp.CharacterAdded:Wait()
-    local hrp = char:WaitForChild("HumanoidRootPart")
-
-    if not _G.AutoKillConnection then
-        local bv = Instance.new("BodyVelocity")
-        bv.MaxForce = Vector3.new(1, 1, 1) * 1e6
-        bv.P = 1e5
-        bv.Velocity = Vector3.zero
-        bv.Parent = hrp
-
-        _G.AutoKillConnection = RunService.RenderStepped:Connect(function()
-            if not _G.AutoKill then
-                bv.Velocity = Vector3.zero
-                return
-            end
-            local closest, min = nil, math.huge
-            for _, p in pairs(Players:GetPlayers()) do
-                if p ~= lp and p.Character and p.Character:FindFirstChild("HumanoidRootPart") and p.Character:FindFirstChild("Humanoid") then
-                    local d = (hrp.Position - p.Character.HumanoidRootPart.Position).Magnitude
-                    if d < min then
-                        min = d
-                        closest = p
-                    end
-                end
-            end
-            if closest and closest.Character then
-                local targetHRP = closest.Character:FindFirstChild("HumanoidRootPart")
-                local hum = closest.Character:FindFirstChild("Humanoid")
-                if targetHRP and hum and hum.Health > 0 then
-                    local goal = targetHRP.Position + Vector3.new(0, 3, 0)
-                    local dir = (goal - hrp.Position)
-                    local speed = math.clamp(dir.Magnitude * 5, 10, 120)
-                    bv.Velocity = dir.Unit * speed
-                    if dir.Magnitude < 4 then
-                        hum:TakeDamage(3)
-                    end
-                end
-            end
-        end)
-    end
+Tab:AddToggle("Left", "Kill Player (Premium)", false, function(v)
 end)
 Tab:RealLine("Left")
 Tab:AddTextLabel("Left", "Trolling")
