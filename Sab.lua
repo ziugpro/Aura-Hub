@@ -37,7 +37,7 @@ task.spawn(function()
 end)
 local SkUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/ziugpro/Tool-Hub/refs/heads/main/Tool-Hub-Ui"))()
 
-local UI = SkUI:CreateWindow("Aura - Hub")
+local UI = SkUI:CreateWindow("Aura - Hub - Free")
 
 local Tab = UI:Create("General")
 local Teleport = UI:Create("Teleport")
@@ -137,106 +137,13 @@ Tab:AddToggle("Left", "Auto Buy Brainrot", false, function(v)
 end)
 Tab:AddToggle("Left", "Lock Base (Coming Soon)", false, function(v)
 end)
-Tab:AddToggle("Left", "Anti Hit", false, function(v)
-    local player = game.Players.LocalPlayer
-    local char = player.Character or player.CharacterAdded:Wait()
-    local hrp = char:FindFirstChild("HumanoidRootPart")
-
-    if hrp == nil then return end
-
-    if v then
-        if not char:FindFirstChild("FakeRoot") then
-            local fake = hrp:Clone()
-            fake.Name = "FakeRoot"
-            fake.Parent = char
-            fake.Anchored = true
-            fake.CanCollide = false
-            fake.Transparency = 1
-        end
-        hrp.Position = Vector3.new(9999, 9999, 9999)
-    else
-        hrp.Position = char:FindFirstChild("FakeRoot") and char.FakeRoot.Position or char:GetPivot().Position
-        if char:FindFirstChild("FakeRoot") then
-            char.FakeRoot:Destroy()
-        end
-    end
+Tab:AddToggle("Left", "Anti Hit (Premium)", false, function(v)
 end)
-Tab:AddToggle("Left", "Anti Hit (v2)", false, function(v)
+Tab:AddToggle("Left", "Anti Hit v2 (Premium)", false, function(v)
     local player = game.Players.LocalPlayer
-    local char = player.Character or player.CharacterAdded:Wait()
-    local hrp = char:FindFirstChild("HumanoidRootPart")
-    if not hrp then return end
-
-    if v then
-        if not char:FindFirstChild("OriginalRootPosition") then
-            local value = Instance.new("Vector3Value")
-            value.Name = "OriginalRootPosition"
-            value.Value = hrp.Position
-            value.Parent = char
-        end
-        hrp.Anchored = true
-        hrp.Position = Vector3.new(99999, 99999, 99999)
-    else
-        local saved = char:FindFirstChild("OriginalRootPosition")
-        if saved then
-            hrp.Position = saved.Value
-            saved:Destroy()
-        else
-            hrp.Position = char:GetPivot().Position
-        end
-        task.wait(0.1)
-        hrp.Anchored = false
-    end
+    
 end)
-Tab:AddButton("Left", "Dash Through Wall", function()
-    local Players = game:GetService("Players")
-    local Workspace = game:GetService("Workspace")
-    local RunService = game:GetService("RunService")
-
-    local LocalPlayer = Players.LocalPlayer
-    if not LocalPlayer then
-        return
-    end
-
-    local Character = LocalPlayer.Character
-    if not Character then
-        Character = LocalPlayer.CharacterAdded:Wait()
-    end
-
-    local RootPart = Character:FindFirstChild("HumanoidRootPart")
-    if not RootPart then
-        return
-    end
-
-    local CurrentPosition = RootPart.Position
-    local CurrentCFrame = RootPart.CFrame
-    local FacingDirection = CurrentCFrame.LookVector
-
-    local DashMagnitude = 30
-    local DashOffset = Vector3.new(0, 1.25, 0)
-
-    local DashVector = FacingDirection * DashMagnitude
-    local Destination = CurrentPosition + DashVector + DashOffset
-
-    local BodyPosition = Instance.new("BodyPosition")
-    BodyPosition.MaxForce = Vector3.new(1e9, 1e9, 1e9)
-    BodyPosition.P = 1e5
-    BodyPosition.D = 2000
-    BodyPosition.Position = Destination
-    BodyPosition.Parent = RootPart
-
-    local DashDuration = 0.2
-    local Connection = nil
-    local StartTime = tick()
-
-    Connection = RunService.RenderStepped:Connect(function()
-        if tick() - StartTime >= DashDuration then
-            BodyPosition:Destroy()
-            if Connection then
-                Connection:Disconnect()
-            end
-        end
-    end)
+Tab:AddButton("Left", "Dash Through Wall (Premium)", function()
 end)
 Tab:RealLine("Left")
 local currentSpeed = 50
